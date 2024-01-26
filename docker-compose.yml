@@ -1,0 +1,7 @@
+services:
+  sai-service-crud-plus:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "6080:6080"

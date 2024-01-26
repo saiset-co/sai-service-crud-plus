@@ -1,0 +1,17 @@
+common:
+  socket:
+    enabled: false
+    port: 6082
+  http:
+    enabled: true
+    port: 6080
+  ws:
+    enabled: false
+    port: 6081
+  storage:
+    url: ""
+    token: ""
+  auth:
+    url: ""
+    token: ""
+  dictionary_prefix: ""
