@@ -1,6 +1,6 @@
 module github.com/saiset-co/sai-service-crud-plus
 
-go 1.21.1
+go 1.21
 
 require (
 	github.com/go-playground/validator/v10 v10.17.0

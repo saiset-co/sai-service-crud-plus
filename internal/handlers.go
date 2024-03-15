@@ -2,6 +2,7 @@ package internal
 
 import (
 	"encoding/json"
+	"net/http"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/pkg/errors"
@@ -11,51 +12,58 @@ import (
 	"github.com/saiset-co/sai-service/service"
 )
 
+const (
+	supportedMethodCreate = "create"
+	supportedMethodRead   = "read"
+	supportedMethodUpdate = "update"
+	supportedMethodDelete = "delete"
+)
+
 func (is InternalService) NewHandler() service.Handler {
 	return service.Handler{
-		"create": service.HandlerElement{
+		supportedMethodCreate: service.HandlerElement{
 			Name:        "Create documents",
 			Description: "Create documents",
 			Function: func(data interface{}, metadata interface{}) (interface{}, int, error) {
-				request, err := is.convertRequest(data, "save")
+				request, err := is.convertRequest(data, supportedMethodCreate)
 				if err != nil {
-					return nil, 500, err
+					return nil, http.StatusInternalServerError, err
 				}
 
 				return actions.NewSaveAction(is.Storage, is.Prefix).Handle(request)
 			},
 		},
-		"read": service.HandlerElement{
+		supportedMethodRead: service.HandlerElement{
 			Name:        "Read documents",
 			Description: "Read documents",
 			Function: func(data interface{}, metadata interface{}) (interface{}, int, error) {
-				request, err := is.convertRequest(data, "get")
+				request, err := is.convertRequest(data, supportedMethodRead)
 				if err != nil {
-					return nil, 500, err
+					return nil, http.StatusInternalServerError, err
 				}
 
 				return actions.NewGetAction(is.Storage, is.Prefix).Handle(request)
 			},
 		},
-		"update": service.HandlerElement{
+		supportedMethodUpdate: service.HandlerElement{
 			Name:        "Update documents",
 			Description: "Update documents",
 			Function: func(data interface{}, metadata interface{}) (interface{}, int, error) {
-				request, err := is.convertRequest(data, "update")
+				request, err := is.convertRequest(data, supportedMethodUpdate)
 				if err != nil {
-					return nil, 500, err
+					return nil, http.StatusInternalServerError, err
 				}
 
 				return actions.NewUpdateAction(is.Storage, is.Prefix).Handle(request)
 			},
 		},
-		"delete": service.HandlerElement{
+		supportedMethodDelete: service.HandlerElement{
 			Name:        "Delete documents",
 			Description: "Delete documents",
 			Function: func(data interface{}, metadata interface{}) (interface{}, int, error) {
-				request, err := is.convertRequest(data, "delete")
+				request, err := is.convertRequest(data, supportedMethodDelete)
 				if err != nil {
-					return nil, 500, err
+					return nil, http.StatusInternalServerError, err
 				}
 
 				return actions.NewDeleteAction(is.Storage, is.Prefix).Handle(request)
@@ -66,7 +74,7 @@ func (is InternalService) NewHandler() service.Handler {
 
 func (is InternalService) convertRequest(data interface{}, requestType string) (types.IRequest, error) {
 	switch requestType {
-	case "read":
+	case supportedMethodRead:
 		request := types.ReadRequest{}
 		dataJson, err := json.Marshal(data)
 		if err != nil {
@@ -84,7 +92,7 @@ func (is InternalService) convertRequest(data interface{}, requestType string) (
 		}
 
 		return request, nil
-	case "create":
+	case supportedMethodCreate:
 		request := types.CreateRequest{}
 		dataJson, err := json.Marshal(data)
 		if err != nil {
@@ -102,7 +110,7 @@ func (is InternalService) convertRequest(data interface{}, requestType string) (
 		}
 
 		return request, nil
-	case "update":
+	case supportedMethodUpdate:
 		request := types.UpdateRequest{}
 		dataJson, err := json.Marshal(data)
 		if err != nil {
@@ -120,7 +128,7 @@ func (is InternalService) convertRequest(data interface{}, requestType string) (
 		}
 
 		return request, nil
-	case "delete":
+	case supportedMethodDelete:
 		request := types.DeleteRequest{}
 		dataJson, err := json.Marshal(data)
 		if err != nil {
