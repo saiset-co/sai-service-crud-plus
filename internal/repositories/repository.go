@@ -15,9 +15,12 @@ type Repository struct {
 }
 
 func (repo *Repository) Create(collection string, documents interface{}) (*adapter.SaiStorageResponse, error) {
-	storageRequest := adapter.CreateRequest{
-		Collection: repo.Prefix + collection,
-		Documents:  documents.([]interface{}),
+	storageRequest := adapter.Request{
+		Method: "create",
+		Data: adapter.CreateRequest{
+			Collection: repo.Prefix + collection,
+			Documents:  documents.([]interface{}),
+		},
 	}
 
 	return repo.Storage.Send(storageRequest)
@@ -30,11 +33,14 @@ func (repo *Repository) Read(collection string, selectParams map[string]interfac
 		return nil, err
 	}
 
-	storageRequest := adapter.ReadRequest{
-		Collection:    repo.Prefix + collection,
-		Select:        selectParams,
-		Options:       options,
-		IncludeFields: selectFields,
+	storageRequest := adapter.Request{
+		Method: "read",
+		Data: adapter.ReadRequest{
+			Collection:    repo.Prefix + collection,
+			Select:        selectParams,
+			Options:       options,
+			IncludeFields: selectFields,
+		},
 	}
 
 	return repo.Storage.Send(storageRequest)
@@ -47,20 +53,26 @@ func (repo *Repository) Update(collection string, selectParams map[string]interf
 		return nil, err
 	}
 
-	storageRequest := adapter.UpdateRequest{
-		Collection: repo.Prefix + collection,
-		Select:     selectParams,
-		Document:   documentData,
-		Options:    options,
+	storageRequest := adapter.Request{
+		Method: "update",
+		Data: adapter.UpdateRequest{
+			Collection: repo.Prefix + collection,
+			Select:     selectParams,
+			Document:   documentData,
+			Options:    options,
+		},
 	}
 
 	return repo.Storage.Send(storageRequest)
 }
 
 func (repo *Repository) Delete(collection string, selectParams map[string]interface{}) (*adapter.SaiStorageResponse, error) {
-	storageRequest := adapter.DeleteRequest{
-		Collection: repo.Prefix + collection,
-		Select:     selectParams,
+	storageRequest := adapter.Request{
+		Method: "delete",
+		Data: adapter.DeleteRequest{
+			Collection: repo.Prefix + collection,
+			Select:     selectParams,
+		},
 	}
 
 	return repo.Storage.Send(storageRequest)

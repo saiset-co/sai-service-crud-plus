@@ -6,7 +6,7 @@ require (
 	github.com/go-playground/validator/v10 v10.17.0
 	github.com/pkg/errors v0.9.1
 	github.com/saiset-co/sai-service v1.0.4
-	github.com/saiset-co/sai-storage-mongo v1.0.5
+	github.com/saiset-co/sai-storage-mongo v1.1.2
 	go.uber.org/zap v1.26.0
 )
 
