@@ -10,4 +10,5 @@ type InternalService struct {
 	Prefix  string
 	Context *service.Context
 	Storage *adapter.SaiStorage
+	AuthUrl string
 }

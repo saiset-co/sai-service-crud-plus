@@ -2,6 +2,7 @@ package internal
 
 import (
 	"encoding/json"
+	"github.com/saiset-co/sai-service/middlewares"
 	"net/http"
 
 	"github.com/go-playground/validator/v10"
@@ -32,6 +33,9 @@ func (is InternalService) NewHandler() service.Handler {
 
 				return actions.NewSaveAction(is.Storage, is.Prefix).Handle(request)
 			},
+			Middlewares: []service.Middleware{
+				middlewares.CreateAuthMiddleware(is.AuthUrl, is.Name, supportedMethodCreate),
+			},
 		},
 		supportedMethodRead: service.HandlerElement{
 			Name:        "Read documents",
@@ -43,6 +47,9 @@ func (is InternalService) NewHandler() service.Handler {
 				}
 
 				return actions.NewGetAction(is.Storage, is.Prefix).Handle(request)
+			},
+			Middlewares: []service.Middleware{
+				middlewares.CreateAuthMiddleware(is.AuthUrl, is.Name, supportedMethodRead),
 			},
 		},
 		supportedMethodUpdate: service.HandlerElement{
@@ -56,6 +63,9 @@ func (is InternalService) NewHandler() service.Handler {
 
 				return actions.NewUpdateAction(is.Storage, is.Prefix).Handle(request)
 			},
+			Middlewares: []service.Middleware{
+				middlewares.CreateAuthMiddleware(is.AuthUrl, is.Name, supportedMethodUpdate),
+			},
 		},
 		supportedMethodDelete: service.HandlerElement{
 			Name:        "Delete documents",
@@ -67,6 +77,9 @@ func (is InternalService) NewHandler() service.Handler {
 				}
 
 				return actions.NewDeleteAction(is.Storage, is.Prefix).Handle(request)
+			},
+			Middlewares: []service.Middleware{
+				middlewares.CreateAuthMiddleware(is.AuthUrl, is.Name, supportedMethodDelete),
 			},
 		},
 	}

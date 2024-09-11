@@ -7,10 +7,10 @@ import (
 	"github.com/saiset-co/sai-storage-mongo/external/adapter"
 )
 
-func main() {
-	name := "SaiServiceCrudPlus"
+const serviceName = "Crud"
 
-	svc := service.NewService(name)
+func main() {
+	svc := service.NewService(serviceName)
 
 	svc.RegisterConfig("config.yml")
 
@@ -24,13 +24,16 @@ func main() {
 		Token: storageToken,
 	}
 
+	authUrl := svc.GetConfig("common.auth.url", "").(string)
+
 	prefix := svc.GetConfig("common.dictionary_prefix", "").(string)
 
 	is := internal.InternalService{
 		Context: svc.Context,
-		Name:    name,
+		Name:    serviceName,
 		Storage: store,
 		Prefix:  prefix,
+		AuthUrl: authUrl,
 	}
 
 	svc.RegisterHandlers(
