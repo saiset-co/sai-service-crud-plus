@@ -2,7 +2,6 @@ package internal
 
 import (
 	"encoding/json"
-	"github.com/saiset-co/sai-service/middlewares"
 	"net/http"
 
 	"github.com/go-playground/validator/v10"
@@ -10,6 +9,7 @@ import (
 
 	"github.com/saiset-co/sai-service-crud-plus/internal/actions"
 	"github.com/saiset-co/sai-service-crud-plus/types"
+	"github.com/saiset-co/sai-service/middlewares"
 	"github.com/saiset-co/sai-service/service"
 )
 
